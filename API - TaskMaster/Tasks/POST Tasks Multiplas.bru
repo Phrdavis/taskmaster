@@ -1,0 +1,51 @@
+meta {
+  name: POST Tasks Multiplas
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8081/api/v1/tasks/multiplos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  [
+    {
+      "title": "Configurar Servidor de Produção",
+      "description": "Tarefa crítica de infraestrutura.",
+      "ownerId": 1
+    },
+    {
+      "title": "Revisar Pull Requests da Equipe Java",
+      "description": "Validar código dos desenvolvedores júnior.",
+      "ownerId": 2
+    },
+    {
+      "title": "Planejamento do Sprint 2",
+      "description": "Reunião de alinhamento com os stakeholders.",
+      "ownerId": 3
+    },
+    {
+      "title": "Desenvolver Entidade de Tasks",
+      "description": "Mapeamento JPA e criação do repositório.",
+      "ownerId": 4
+    },
+    {
+      "title": "Implementar Interceptor no Angular",
+      "description": "Injetar JWT automaticamente nas requisições.",
+      "ownerId": 5
+    },
+    {
+      "title": "Refatorar Segurança do Spring",
+      "description": "Remover dependências circulares do SecurityConfig.",
+      "ownerId": 4
+    }
+  ]
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

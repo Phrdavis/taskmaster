@@ -1,0 +1,20 @@
+meta {
+  name: GET MyTeams
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8081/api/v1/teams/myTeams
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0YXNrbWFzdGVyLWFwaSIsInN1YiI6ImRhdmkudXNlckB0YXNrbWFzdGVyLmNvbSIsImV4cCI6MTc2OTExMTI4MX0.vEp9D1fx7Nc5hDHulRS8BDuY5KUxhjEFMEnPcogIfAc
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

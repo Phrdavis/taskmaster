@@ -1,0 +1,20 @@
+meta {
+  name: GET MyTasks
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8081/api/v1/tasks/myTasks
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0YXNrbWFzdGVyLWFwaSIsInN1YiI6ImRhdmkudXNlckB0YXNrbWFzdGVyLmNvbSIsImV4cCI6MTc2OTExMTI4MX0.vEp9D1fx7Nc5hDHulRS8BDuY5KUxhjEFMEnPcogIfAc
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

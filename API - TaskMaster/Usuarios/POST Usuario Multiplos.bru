@@ -1,0 +1,51 @@
+meta {
+  name: POST Usuario Multiplos
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8081/api/v1/usuarios/multiplos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  [
+    {
+      "name": "Admin Sistema",
+      "email": "admin@taskmaster.com",
+      "password": "senhaSegura123",
+      "role": "ADMIN"
+    },
+    {
+      "name": "Ricardo Coordenador",
+      "email": "ricardo.coord@taskmaster.com",
+      "password": "senhaSegura123",
+      "role": "COORDINATOR"
+    },
+    {
+      "name": "Beatriz Coordenadora",
+      "email": "beatriz.coord@taskmaster.com",
+      "password": "senhaSegura123",
+      "role": "COORDINATOR"
+    },
+    {
+      "name": "Davi Usuario",
+      "email": "davi.user@taskmaster.com",
+      "password": "admin123@",
+      "role": "USER"
+    },
+    {
+      "name": "Fernanda Dev",
+      "email": "fernanda.dev@taskmaster.com",
+      "password": "senhaSegura123",
+      "role": "USER"
+    }
+  ]
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

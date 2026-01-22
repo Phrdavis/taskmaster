@@ -1,0 +1,29 @@
+meta {
+  name: POST Teams Multiplos
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8081/api/v1/teams/multiplos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  [
+    {
+      "name": "EQUIPE TESTE 01",
+      "coordinatorId": 4,
+      "members": [
+        { "id": 1 },
+        { "id": 2 }
+      ]
+    }
+  ]
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

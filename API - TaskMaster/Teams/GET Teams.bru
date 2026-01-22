@@ -1,0 +1,15 @@
+meta {
+  name: GET Teams
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8081/api/v1/teams
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

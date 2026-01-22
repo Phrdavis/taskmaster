@@ -1,0 +1,15 @@
+meta {
+  name: GET Usuarios
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8081/api/v1/usuarios
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
