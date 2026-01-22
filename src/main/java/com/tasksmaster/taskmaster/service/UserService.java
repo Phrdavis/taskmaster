@@ -53,9 +53,11 @@ public class UserService {
         return savedUsers;
     }
 
-    public User buscarPorId(Long id) {
-        return userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public UserDto buscarPorId(Long id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuário ID " + id + " não encontrado!"));
+
+        return new UserDto(user);
     }
 
     public Page<UserDto> buscarTodos(Pageable paginacao) {
@@ -68,7 +70,9 @@ public class UserService {
     }
 
     public UserDto atualizar(Long id, UserDto newUser) {
-        User existingUser = buscarPorId(id);
+        User existingUser = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuário ID " + id + " não encontrado!"));
+
         existingUser.setName(newUser.getName());
 
         if(userRepository.existsByEmail(newUser.getEmail()) && !existingUser.getEmail().equals(newUser.getEmail())) {

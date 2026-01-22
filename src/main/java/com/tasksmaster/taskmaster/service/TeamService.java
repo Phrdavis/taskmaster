@@ -73,9 +73,11 @@ public class TeamService {
         return savedTeams;
     }
 
-    public Team buscarPorId(Long id) {
-        return teamRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Time não encontrado"));
+    public TeamDto buscarPorId(Long id) {
+        Team team = teamRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Time ID " + id + " não encontrado!"));
+
+        return new TeamDto(team);
     }
 
     public Page<TeamDto> buscarTodos(Pageable paginacao) {
@@ -105,7 +107,8 @@ public class TeamService {
     }
 
     public TeamDto atualizar(Long id, TeamDto newTeam) {
-        Team existingTeam = buscarPorId(id);
+        Team existingTeam = teamRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Time ID " + id + " não encontrado!"));
 
         if(newTeam.getName() != null && !newTeam.getName().isEmpty()) {
             existingTeam.setName(newTeam.getName());

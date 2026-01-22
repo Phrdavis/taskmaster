@@ -57,9 +57,11 @@ public class TasksService {
         return savedTasks;
     }
 
-    public Tasks buscarPorId(Long id) {
-        return tasksRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+    public TasksDto buscarPorId(Long id) {
+        Tasks tasks = tasksRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Tarefa ID " + id + " não encontrada!"));
+
+        return new TasksDto(tasks);
     }
 
     public Page<TasksDto> buscarTodos(Pageable paginacao) {
@@ -89,24 +91,30 @@ public class TasksService {
     }
 
     public TasksDto atualizar(Long id, TasksDto newTask) {
-        Tasks existingTask = buscarPorId(id);
+        Tasks existingTask = tasksRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Tarefa ID " + id + " não encontrada!"));
 
-        if(newTask.getTitle() != null && !newTask.getTitle().isEmpty()) {
+        if(newTask.getTitle() != null && !newTask.getTitle().equals(existingTask.getTitle())
+            && tasksRepository.existsByTitle(newTask.getTitle())) {
+            throw new RuntimeException("Título da tarefa já está em uso!");
+        }
+
+        if(!newTask.getTitle().isEmpty()){
             existingTask.setTitle(newTask.getTitle());
         }
 
-        if(newTask.getDescription() != null && !newTask.getDescription().isEmpty()) {
+        if(!newTask.getDescription().isEmpty()){
             existingTask.setDescription(newTask.getDescription());
         }
 
-        if(newTask.getOwnerId() != null) {
-            User owner = userRepository.findById(newTask.getOwnerId())
-                .orElseThrow(() -> new RuntimeException("Responsável ID " + newTask.getOwnerId() + " não encontrado!")); 
-            existingTask.setOwner(owner);
+        if (!existingTask.getOwner().getId().equals(newTask.getOwnerId())) {
+            User newOwner = userRepository.findById(newTask.getOwnerId())
+                .orElseThrow(() -> new RuntimeException("Responsável ID " + newTask.getOwnerId() + " não encontrado!"));
+            existingTask.setOwner(newOwner);
         }
-        Tasks tasksSave = tasksRepository.save(existingTask);
-        
-        return new TasksDto(tasksSave);
+
+        Tasks updatedTask = tasksRepository.save(existingTask);
+        return new TasksDto(updatedTask);
     }
 
     public void deletar(Long id){
