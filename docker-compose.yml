@@ -14,7 +14,6 @@ services:
       - ./data_taskmaster:/var/lib/mysql
       - ./init_scripts:/docker-entrypoint-initdb.d # Mapeando a pasta de scripts
     healthcheck:
-      # Note que removemos o espaço entre -p e a variável para evitar erros de shell
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${DB_USER} -p$${DB_PASSWORD}"]
       interval: 10s
       timeout: 5s
@@ -27,7 +26,6 @@ services:
     restart: always
     environment:
       SPRING_PROFILES_ACTIVE: mysql
-      # Aqui o host deve ser 'mysql' (nome do serviço) e a porta 3306
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${DB_NAME}?createDatabaseIfNotExist=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
