@@ -17,6 +17,15 @@ body:json {
   }
 }
 
+script:post-response {
+  // Verifica se a resposta foi 200 OK
+  if (res.getStatus() === 200) {
+    const data = res.getBody();
+    // Salva o token em uma variável de ambiente do Bruno
+    bru.setEnvVar("token", data.token);
+  }
+}
+
 settings {
   encodeUrl: true
   timeout: 0

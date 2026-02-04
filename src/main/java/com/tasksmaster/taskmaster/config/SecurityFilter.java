@@ -33,16 +33,43 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         
         if (token != null) {
-            var email = tokenService.validarToken(token); // Retorna o email do subject
-            if (email != null) {
-                User user = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            var login = tokenService.validarToken(token);
+            
+            // Pegamos os dados da requisição ATUAL
+            String currentIp = request.getRemoteAddr();
+            String currentUserAgent = request.getHeader("User-Agent");
+            
+            // Pegamos os dados de dentro do TOKEN
+            String tokenIp = tokenService.getClaim(token, "ip");
+            String tokenUA = tokenService.getClaim(token, "userAgent");
 
-                // Aqui informamos ao Spring que o usuário está autenticado e quais suas roles
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            boolean isIpValid = false;
+
+            if (tokenIp != null && currentIp != null) {
+                isIpValid = currentIp.equals(tokenIp) || 
+                            (currentIp.equals("0:0:0:0:0:0:0:1") && "127.0.0.1".equals(tokenIp)) ||
+                            ("127.0.0.1".equals(currentIp) && "0:0:0:0:0:0:0:1".equals(tokenIp));
+            }
+
+            boolean isUaValid = (tokenUA == null) || tokenUA.equals(currentUserAgent);
+
+            if (login != null && (isIpValid && isUaValid) && currentUserAgent.equals(tokenUA)) {
+                
+                var email = tokenService.validarToken(token); 
+                if (email != null) {
+                    User user = userRepository.findByEmail(email)
+                            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+
+            } else {
+                
+                throw new RuntimeException("Token utilizado em dispositivo/rede diferente!");
             }
         }
+        
         filterChain.doFilter(request, response);
     }
 

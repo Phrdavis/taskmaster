@@ -35,7 +35,7 @@ public class TasksController {
     }
 
     @PostMapping("/multiplos")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> criarMultiplos(@RequestBody List<TasksDto> tasks) {
         return ResponseEntity.ok(tasksService.cadastrarMultiplos(tasks));
     }
@@ -47,14 +47,14 @@ public class TasksController {
 
     @GetMapping
     public ResponseEntity<Page<TasksDto>> buscarTodos(
-        @PageableDefault(size = 10, sort = "title", direction = Sort.Direction.ASC) Pageable pageable
+        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
     ) {
         return ResponseEntity.ok(tasksService.buscarTodos(pageable));
     }
 
     @GetMapping("/myTasks")
     public ResponseEntity<Page<TasksDto>> buscarMinhasTarefas(
-        @PageableDefault(size = 10, sort = "title", direction = Sort.Direction.ASC) Pageable pageable
+        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 

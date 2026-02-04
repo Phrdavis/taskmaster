@@ -35,7 +35,7 @@ public class TeamController {
     }
 
     @PostMapping("/multiplos")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> criarMultiplos(@RequestBody List<TeamDto> teams) {
         return ResponseEntity.ok(teamService.cadastrarMultiplos(teams));
     }

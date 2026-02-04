@@ -65,12 +65,10 @@ public class TasksService {
     }
 
     public Page<TasksDto> buscarTodos(Pageable paginacao) {
-        return tasksRepository.findAll(paginacao).stream()
-            .map(TasksDto::new)
-            .collect(Collectors.collectingAndThen(
-                Collectors.toList(),
-                list -> new PageImpl<>(list)
-            ));
+
+        Page<Tasks> tasksPage = tasksRepository.findAll(paginacao);
+
+        return tasksPage.map(TasksDto::new);
     }
 
     public Page<TasksDto> buscarMinhasTarefas(String email, Pageable paginacao) {
@@ -82,12 +80,9 @@ public class TasksService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        return tasksRepository.findMyTasks(user.getId(), "", paginacao).stream()
-            .map(TasksDto::new)
-            .collect(Collectors.collectingAndThen(
-                Collectors.toList(),
-                list -> new PageImpl<>(list)
-            ));
+        Page<Tasks> tasksPage = tasksRepository.findMyTasks(user.getId(), "", paginacao);
+
+        return tasksPage.map(TasksDto::new);
     }
 
     public TasksDto atualizar(Long id, TasksDto newTask) {
