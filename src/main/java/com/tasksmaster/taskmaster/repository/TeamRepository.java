@@ -17,13 +17,8 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     Boolean existsByName(String name);
 
     @Query("SELECT DISTINCT t FROM Team t " +
-           "JOIN t.coordinator u " +
-           "LEFT JOIN Team team ON team.coordinator.id = :userId " +
-           "LEFT JOIN Team memberTeam ON u.id IN (SELECT m.id FROM Team t2 JOIN t2.members m WHERE t2.id = memberTeam.id) " +
-           "WHERE (u.id = :userId " +
-           "   OR team.coordinator.id = :userId " +
-           "   OR EXISTS (SELECT 1 FROM Team ut JOIN ut.members utm WHERE utm.id = :userId AND u.id IN (SELECT m2.id FROM ut.members m2))) " +
-           "AND t.deleted = :deleted"
-    )
+        "LEFT JOIN t.members m " +
+        "WHERE (t.coordinator.id = :userId OR m.id = :userId) " +
+        "AND t.deleted = :deleted")
     Page<Team> findMyTeams(@Param("userId") Long userId, @Param("deleted") String deleted, Pageable pageable);
 }
